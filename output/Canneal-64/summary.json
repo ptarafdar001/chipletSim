@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-04-02T12:25:10",
+  "topology": {
+    "chiplet_count": 7,
+    "rings": 1,
+    "cores_per_chiplet": 4,
+    "total_cores": 28,
+    "theoretical_diameter": 2,
+    "intra_chiplet_hop_cycles": 2,
+    "inter_chiplet_hop_cycles": 27,
+    "phit_bytes": 16
+  },
+  "application": {
+    "task_count": 20546,
+    "edge_count": 60928
+  },
+  "results": {
+    "makespan_cycles": 4835164,
+    "clusters_formed": 6993,
+    "tasks_placed": 20546,
+    "tasks_deferred": 0,
+    "tasks_failed": 0,
+    "replicas_created": 39,
+    "faults_detected": 0,
+    "faults_recovered": 0,
+    "avg_chiplet_utilization": 0.829799,
+    "avg_core_utilization": 0.831167,
+    "load_imbalance_stddev": 0.0252567,
+    "total_comm_edges": 60922,
+    "total_comm_latency_cycles": 2895283,
+    "avg_comm_latency_cycles": 47.5244,
+    "max_comm_latency_cycles": 147,
+    "min_comm_latency_cycles": 35,
+    "total_wait_cycles": 80461055,
+    "avg_task_wait_cycles": 3916.14,
+    "critical_path_length": 4835164
+  },
+  "noc_params": {
+    "intra_hop_cycles": 2,
+    "inter_hop_cycles": 27,
+    "phit_bytes": 16,
+    "flit_bytes": 64,
+    "mem_access_penalty": 10,
+    "io_stall_penalty": 5
+  },
+  "chiplets": [
+    {"id":0,"ring":0,"degree":6,"tasks_hosted":3277,"total_exec_cycles":17124555,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":1,"ring":1,"degree":3,"tasks_hosted":2910,"total_exec_cycles":16120462,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":2,"ring":1,"degree":3,"tasks_hosted":2797,"total_exec_cycles":15472790,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":3,"ring":1,"degree":3,"tasks_hosted":2871,"total_exec_cycles":15790469,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":4,"ring":1,"degree":3,"tasks_hosted":2878,"total_exec_cycles":15731934,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":5,"ring":1,"degree":3,"tasks_hosted":2923,"total_exec_cycles":15983887,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":6,"ring":1,"degree":3,"tasks_hosted":2901,"total_exec_cycles":16117902,"faulty_cores":0,"state":"ACTIVE"}
+  ]
+}

@@ -1,0 +1,31 @@
+@WIRE_BIT_WIDTH 32 
+@FP_DIST_UNIT 1E-4 
+@TRANS_PER_BIT 1.5 
+#@E_MAX 200E6 
+@E_MAX 500E6 
+@NUM_MAX 8 
+# Bits in block, price, m^2 area per bit
+@MEMORY 8192 1.95E-3 372E-9
+
+@WIRING { 
+# max buffer size 
+500 
+# width_min 
+0.18E-6 
+# spacing_min 
+0.24E-6 
+# sheet_r 
+0.0679 
+# area_c 
+0.0596E-3 
+# fringe_c, 
+0.0641E-9 
+# intrinsic_delay 
+66.4E-12 
+# min_dev_input_c 
+0.234E-15 
+# min_dev_input_r 
+17.1E3 
+# voltage 
+1.8 
+} 

@@ -1,0 +1,7 @@
+src_task_id,src_name,src_chiplet,src_core,dst_task_id,dst_name,dst_chiplet,dst_core,volume_bytes,comm_latency_cycles,inject_cycle
+1,g1_src_t45,3,0,2,g1_patricia_t17,3,0,4194304,262146,32505
+3,g1_pf512_t18,3,3,4,g1_sink_t45,3,1,4194304,262171,44505
+5,g2_src_t45,5,0,6,g2_patricia_t17,5,0,8388608,524290,32505
+7,g2_pf1m_t19,5,3,8,g2_sink_t45,5,1,8388608,524315,44705
+9,g3_src_t45,6,0,10,g3_patricia_t17,6,0,16777216,1048578,32505
+11,g3_pf2m_t20,6,3,12,g3_sink_t45,6,1,16777216,1048603,44905

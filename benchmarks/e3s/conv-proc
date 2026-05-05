@@ -1,0 +1,406 @@
+#!/usr/bin/env perl
+BEGIN{$^W=1; $| = 1}
+
+# Uses pspecs
+
+####
+$asic_power_ratio = 0.1;
+$asic_area_ratio = 0.25;
+$asic_time_ratio = 0.1;
+$asic_price_ratio = 10.0;
+$core_dens = 0.55 / 2.0;
+
+$client_pow_ratio = 0.2;
+$client_time_ratio = 5.0;
+####
+
+sub lst(@);
+
+####
+%pspecs = ();
+
+srand(1);
+
+open FILE, '< pspecs';
+while (<FILE>) {
+	if (not m/^#/ and not m/^$/) {
+		chomp;
+		my ($proc, $price, $ptime, $pow, $area, $freq) =
+			split / & /, $_;
+
+		$pspecs{$proc} = {};
+		$pspecs{$proc}{'price'} = $price;
+		$pspecs{$proc}{'ptime'} = $ptime;
+		$pspecs{$proc}{'pow'} = $pow;
+		$pspecs{$proc}{'area'} = $area;
+		$pspecs{$proc}{'freq'} = $freq;
+	}
+}
+close FILE;
+
+####
+@file = ();
+
+while (<>) {
+	s/>/>\n/g;
+	s/</\n</g;
+	my @line = split(/\n/, $_);
+	foreach (@line) {
+		s/^\s+//;
+		s/\s+$//;
+		s/^<TD>$/\@COL/;
+		s/^<TR>$/\@ROW/;
+		if (length $_ and not m/^<[^>]*>$/) {
+			push @file, $_;
+		}
+	}
+}
+
+@proc = ();
+$proc_read = 0;
+
+# {processor name, bench name} = "ips" "cbytes"
+%bench = ();
+@bench_name = ();
+$bench_read = 0;
+$proc_index = 0;
+$even_bench_col = 1;
+$sleep = 1;
+$cache_read = 0;
+$cache_final = 0;
+%cache_lock = ();
+$bench_next = 0;
+
+# {processor name} = "mem", "fmax"
+%proc_attrib = ();
+
+# Do input
+foreach (@file) {
+	my $p = $proc[$proc_index];
+
+	if ($proc_read) {
+		push @proc, $_;
+		if (not defined $cache_lock{$_}) {
+			$proc_attrib{$_} = {};
+		}
+
+		if (m/^\@ROW$/) {
+			$proc_read = 0;
+			$#proc -= 1;
+
+			foreach (@proc) {
+				$bench{$_} = {} if not defined $bench{$_};
+			}
+		}
+	} elsif ($bench_read) {
+		if (m/^\@ROW$/) {
+			$proc_index = 0;
+			$even_bench_col = 1;
+		} elsif (m/^Note:$/) {
+			$bench_read = 0;
+			$sleep = 1;
+		} elsif (m/^\d/ or m/^-$/ or m/^Under revision$/) {
+			s/^Under revision$/-/;
+			s/,//g;
+			if (not defined $bench{$p}{lst(@bench_name)}) {
+				$bench{$p}{lst(@bench_name)} = {}
+			}
+
+			if ($even_bench_col) {
+				$bench{$p}{lst(@bench_name)}{'ips'} = $_;
+			} else {
+				$bench{$p}{lst(@bench_name)}{'cbytes'} = $_;
+				++$proc_index;
+			}
+
+			$even_bench_col = ! $even_bench_col;
+		} elsif (m/^See note below$/ or m/^Under revision$/) {
+			$bench{$p}{lst(@bench_name)} = {}
+				if (not defined $bench{$p}{lst(@bench_name)});
+
+			$bench{$p}{lst(@bench_name)}{'ips'} = '-';
+			$bench{$p}{lst(@bench_name)}{'cbytes'} = '-';
+		} elsif (m/^\D/) {
+			push @bench_name, $_;
+		}
+	} elsif ($cache_read) {
+		if (m/^\@ROW$/) {
+			if ($cache_final) {
+				foreach my $pc (@proc) {
+					$cache_lock{$pc} = 1;
+				}
+			}
+			$cache_read = 0;
+			$cache_final = 0;
+		} elsif (m/^(\d+)/) {
+			if (not $cache_lock{$p}) {
+				if (defined $proc_attrib{$p}{'mem'}) {
+					$proc_attrib{$p}{'mem'} += $1;
+				} else {
+					$proc_attrib{$p}{'mem'} = $1;
+				}
+			}
+			++$proc_index;
+		} elsif (m/^\D/) {
+			if (not defined $proc_attrib{$p}{'mem'}) {
+				$proc_attrib{$p}{'mem'} = 0;
+			}
+			++$proc_index;
+		}
+	}
+
+	if ($sleep) {
+		if (m/^\@ROW$/) {
+			if ($bench_next) {
+				$bench_read = 1;
+				$bench_next = 0;
+			} else {
+				$sleep = 0;
+			}
+		}
+	} else {
+		if (m/^Processor Name-Clock$/) {
+			$proc_index = 0;
+			$proc_read = 1;
+			@proc = ();
+		} elsif (m/^Iterations$/) {
+			$proc_index = 0;
+			$bench_next = 1;
+			$sleep = 1;
+		} elsif (m/^L1 Instruction Cache Size$/ or
+			m/^L1 Data Cache Size$/)
+		{
+			$proc_index = 0;
+			$cache_read = 1;
+			$cache_final = 0;
+		} elsif (m/^L2 Cache Size$/) {
+			$proc_index = 0;
+			$cache_read = 1;
+			$cache_final = 1;
+		}
+	}
+}
+
+@proc = ();
+
+# Do memory estimation
+foreach my $p (keys %pspecs) {
+	if ($pspecs{$p}{'area'} eq '-') {
+# None known, need to make an estimate.
+		$pspecs{$p}{'area'} = $proc_attrib{$p}{'mem'} * 0.3;
+		$pspecs{$p}{'area'} = 1 if ($pspecs{$p}{'area'} < 1);
+	}
+}
+
+# Do output
+
+@programs = qw/cowls mocsyn mocsyn-asic cords/;
+
+# Add client and server locking tasks.
+push @bench_name, 'src-sink';
+
+@pname = sort keys(%bench);
+
+foreach my $prog (@programs) {
+	my $real_p_index = 0;
+
+	open FILE, "> proc-db-$prog";
+	select FILE;
+
+	my @ptypes = ();
+	if ($prog eq 'cowls') {
+		@ptypes = qw/CLIENT_PE SERVER_PE/;
+	} elsif ($prog eq 'mocsyn') {
+		@ptypes = qw/square rectangle/;
+	} elsif ($prog eq 'mocsyn-asic') {
+		@ptypes = qw/square rectangle asic-sq asic-rec/;
+	} elsif ($prog eq 'cords') {
+		@ptypes = 'PROC';
+	}
+
+	for my $ptype (@ptypes) {
+		for (my $pname_i = 0; $pname_i < scalar(@pname); ++$pname_i) {
+			my $pn = $pname[$pname_i];
+
+# Add src-sink
+			$bench{$pn}{'src-sink'}{'ips'} = 100000;
+			$bench{$pn}{'src-sink'}{'cbytes'} = 10;
+
+			if (not defined $pspecs{$pn}) {
+				next;
+			}
+
+			my $price = $pspecs{$pn}{'price'};
+			my $pow = $pspecs{$pn}{'pow'};
+
+			my $idle_pow = $pow / 10;
+			my $asic_b_valid = int(rand(scalar(@bench_name)));
+
+			die if ($pow =~ m/^-$/);
+
+			if ($prog eq 'cowls' or $prog eq 'cords') {
+
+				if ($ptype eq 'CLIENT_PE') {
+					$pow *= $client_pow_ratio;
+					$idle_pow *= $client_pow_ratio;
+					
+					print <<END
+# $pn
+\@${ptype} $real_p_index {
+# price buffered preempt_power commun_energy_bit io_energy_bit idle_power
+END
+				;
+
+					format PROC_COWLS_CLIENT =
+  @<<<< @<<<<<<< @<<<<<<<<<<<< @<<<<<<<<<<<<<<<< @<<<<<<<<<<<< @<<<<<<<<<
+$price, 1, $pow, 0, 0, sprintf("%.2g", $idle_pow);
+.
+					$~ = PROC_COWLS_CLIENT;
+					write;
+				} else {
+					print <<END
+# $pn
+\@${ptype} $real_p_index {
+# price buffered preempt_power commun_energy_bit io_energy_bit idle_power
+END
+				;
+
+					format PROC_COWLS =
+  @<<<< @<<<<<<< @<<<<<<<<<<<< @<<<<<<<<<<<<<<<< @<<<<<<<<<<<< @<<<<<<<<<
+$price, 1, $pow, 0, 0, sprintf("%.2g", $idle_pow);
+.
+					$~ = PROC_COWLS;
+					write;
+				}
+####
+			} elsif ($prog eq 'mocsyn' or $prog eq 'mocsyn-asic') {
+				my $area_mm2 = $pspecs{$pn}{'area'};
+				my $a_sq_rt = sqrt($area_mm2);
+				my $rec_wd = 0.5 * $a_sq_rt;
+				my $rec_ht = $area_mm2 / $rec_wd;
+				my $width = 0;
+				my $height = 0;
+
+				if ($ptype eq 'square') {
+					$width = $a_sq_rt * 1E-3;
+					$height = $a_sq_rt * 1E-3;
+				} elsif ($ptype eq 'rectangle') {
+					$width = $rec_wd * 1E-3;
+					$height = $rec_ht * 1E-3;
+				} elsif ($ptype eq 'asic-sq') {
+					$width = $a_sq_rt * 1E-3 * sqrt($asic_area_ratio);
+					$height = $a_sq_rt * 1E-3 * sqrt($asic_area_ratio);
+					$pow *= $asic_power_ratio;
+					$idle_pow *= $asic_power_ratio;
+					$price *= $asic_price_ratio;
+				} elsif ($ptype eq 'asic-rec') {
+					$width = $rec_wd * 1E-3 * sqrt($asic_area_ratio);
+					$height = $rec_ht * 1E-3 * sqrt($asic_area_ratio);
+					$pow *= $asic_power_ratio;
+					$idle_pow *= $asic_power_ratio;
+					$price *= $asic_price_ratio;
+				} else {
+					die;
+				}
+
+				$width = sprintf("%.2e", $width);
+				$height = sprintf("%.2e", $height);
+
+				my $freq = $pspecs{$pn}{'freq'} * 1E6;
+				$freq = sprintf("%.2e", $freq);
+
+				print <<END
+# $pn -- $ptype
+\@CORE $real_p_index {
+# price buffered max_freq width    height   density  preempt_power commun_en_bit io_en_bit idle_power
+END
+			;
+
+				format PROC_MOCSYN =
+  @<<<< @<<<<<<< @<<<<<<< @<<<<<<< @<<<<<<< @<<<<<<< @<<<<<<<<<<<< @<<<<<<<<<<<< @<<<<<<<< @<<<<<<<<<<<
+$price, 1, $freq, $width, $height, $core_dens, 0, 0, 0, sprintf("%.2g", $pow / 10)
+.
+				$~ = PROC_MOCSYN;
+				write;
+			}
+
+
+			print <<END
+#------------------------------------------------------------------------------
+# type version valid task_time preempt_time code_bits task_power
+END
+			;
+
+			for (my $bname_i = 0; $bname_i < scalar(@bench_name);
+				++$bname_i)
+			{
+				my $bn = $bench_name[$bname_i];
+				my $bnch = $bench{$pn}{$bn};
+
+				my $valid = (defined(%$bnch) and
+					($$bnch{'ips'} !~ m/-/) and
+					($$bnch{'cbytes'} !~ m/-/))			
+					? 1 : 0;
+
+				my $ttime = 0;
+				my $ptime = $pspecs{$pn}{'ptime'};
+				my $cbits = 0;
+
+				if ($valid) {
+					my $ips = $$bnch{'ips'};
+					my $cbytes = $$bnch{'cbytes'};
+					$ttime = sprintf("%.2g", 1 / $ips);
+					$cbits = sprintf("%.2g", $cbytes * 8);
+				}
+
+				if ($ptype eq 'asic-sq' || $ptype eq 'asic-rec') {
+					$valid = 0 if ($asic_b_valid != $bname_i);
+					$ttime *= $asic_time_ratio;
+				}
+
+				if ($ptype eq 'CLIENT_PE') {
+					$ttime *= $client_time_ratio;
+				}
+
+				format FORMAT_TASK =
+@<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+"# " . $bn
+@<<<<<< 0      @<<<< @<<<<<<<< @<<<<<<<<<<< @<<<<<<<< @<<<<<<<<<
+$bname_i, $valid, $ttime, $ptime, $cbits, sprintf("%.2g", $pow)
+
+.
+
+				$~ = FORMAT_TASK;
+				write;
+			}
+			print FILE "}\n\n";
+			++$real_p_index;
+		}
+
+		if ($prog eq 'cowls') {
+			$real_p_index = 0;
+		}
+	}
+
+	close FILE;
+	select STDOUT;
+}
+
+####
+sub lst(@) {
+	return $_[$#_];
+}
+
+###############
+
+@client_proc = @proc;
+@server_proc = @proc;
+
+foreach (@client_proc) {
+	s/\@PROC/\@CLIENT_PE/;
+}
+
+foreach (@server_proc) {
+	s/\@PROC/\@SERVER_PE/;
+}
+

@@ -1,0 +1,59 @@
+#!/usr/bin/env perl
+BEGIN{$^W=1; $| = 1}
+
+# Uses lspecs
+
+####
+@programs = qw/cowls mocsyn cords/;
+
+####
+@link = `cat lspecs`;
+@output = ();
+
+foreach my $prog (@programs) {
+	if ($prog eq 'cowls') {
+		my $local = 1;
+		my @local_link = ();
+		my @prim_link = ();
+
+		foreach (@link) {
+			if (m/\@PRIM_LINK/) {
+				$local = 0;
+			}
+
+			if ($local) {
+				push @local_link, $_;
+			} else {
+				push @prim_link, $_;
+			}
+		}
+
+		@client_link = @local_link;
+		@server_link = @local_link;
+
+		foreach (@client_link) {
+			s/\@LINK/\@CLIENT_LINK/;
+		}
+
+		foreach (@server_link) {
+			s/\@LINK/\@SERVER_LINK/;
+		}
+
+		@output = (@client_link, "\n", @server_link,
+			"\n", @prim_link);
+	} elsif ($prog eq 'mocsyn') {
+		@output = ();
+	} elsif ($prog eq 'cords') {
+		my $zap_plink = 0;
+
+		foreach (@link) {
+			$zap_plink = 1 if (m/^\@PRIM_LINK/);
+			push @output, $_ if not $zap_plink;
+			$zap_plink = 0 if (m/^}/);
+		}
+	}
+
+	open FILE, "> link-db-$prog";
+	print FILE @output;
+	close FILE;
+}

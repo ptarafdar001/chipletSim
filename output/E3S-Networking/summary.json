@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-05-01T12:29:51",
+  "topology": {
+    "chiplet_count": 7,
+    "rings": 1,
+    "cores_per_chiplet": 4,
+    "total_cores": 28,
+    "theoretical_diameter": 2,
+    "intra_chiplet_hop_cycles": 2,
+    "inter_chiplet_hop_cycles": 27,
+    "phit_bytes": 16
+  },
+  "application": {
+    "task_count": 13,
+    "edge_count": 9
+  },
+  "results": {
+    "makespan_cycles": 1126013,
+    "clusters_formed": 4,
+    "tasks_placed": 13,
+    "tasks_deferred": 0,
+    "tasks_failed": 0,
+    "replicas_created": 7,
+    "faults_detected": 0,
+    "faults_recovered": 0,
+    "avg_chiplet_utilization": 0.00808891,
+    "avg_core_utilization": 0.0144556,
+    "load_imbalance_stddev": 0.00898452,
+    "total_comm_edges": 6,
+    "total_comm_latency_cycles": 3670103,
+    "avg_comm_latency_cycles": 611684,
+    "max_comm_latency_cycles": 1048603,
+    "min_comm_latency_cycles": 262146,
+    "total_wait_cycles": 3670103,
+    "avg_task_wait_cycles": 282316,
+    "critical_path_length": 1126013
+  },
+  "noc_params": {
+    "intra_hop_cycles": 2,
+    "inter_hop_cycles": 27,
+    "phit_bytes": 16,
+    "flit_bytes": 64,
+    "mem_access_penalty": 10,
+    "io_stall_penalty": 5
+  },
+  "chiplets": [
+    {"id":0,"ring":0,"degree":6,"tasks_hosted":0,"total_exec_cycles":0,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":1,"ring":1,"degree":3,"tasks_hosted":1,"total_exec_cycles":5700,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":2,"ring":1,"degree":3,"tasks_hosted":0,"total_exec_cycles":0,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":3,"ring":1,"degree":3,"tasks_hosted":5,"total_exec_cycles":82910,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":4,"ring":1,"degree":3,"tasks_hosted":0,"total_exec_cycles":0,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":5,"ring":1,"degree":3,"tasks_hosted":5,"total_exec_cycles":83110,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":6,"ring":1,"degree":3,"tasks_hosted":5,"total_exec_cycles":83310,"faulty_cores":0,"state":"ACTIVE"}
+  ]
+}

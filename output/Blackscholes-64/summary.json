@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-04-02T12:25:08",
+  "topology": {
+    "chiplet_count": 7,
+    "rings": 1,
+    "cores_per_chiplet": 4,
+    "total_cores": 28,
+    "theoretical_diameter": 2,
+    "intra_chiplet_hop_cycles": 2,
+    "inter_chiplet_hop_cycles": 27,
+    "phit_bytes": 16
+  },
+  "application": {
+    "task_count": 4226,
+    "edge_count": 8320
+  },
+  "results": {
+    "makespan_cycles": 485959,
+    "clusters_formed": 3206,
+    "tasks_placed": 4226,
+    "tasks_deferred": 0,
+    "tasks_failed": 0,
+    "replicas_created": 1,
+    "faults_detected": 0,
+    "faults_recovered": 0,
+    "avg_chiplet_utilization": 0.903075,
+    "avg_core_utilization": 0.903242,
+    "load_imbalance_stddev": 0.131128,
+    "total_comm_edges": 8320,
+    "total_comm_latency_cycles": 255496,
+    "avg_comm_latency_cycles": 30.7087,
+    "max_comm_latency_cycles": 35,
+    "min_comm_latency_cycles": 29,
+    "total_wait_cycles": 913139168,
+    "avg_task_wait_cycles": 216076,
+    "critical_path_length": 485959
+  },
+  "noc_params": {
+    "intra_hop_cycles": 2,
+    "inter_hop_cycles": 27,
+    "phit_bytes": 16,
+    "flit_bytes": 64,
+    "mem_access_penalty": 10,
+    "io_stall_penalty": 5
+  },
+  "chiplets": [
+    {"id":0,"ring":0,"degree":6,"tasks_hosted":464,"total_exec_cycles":1373452,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":1,"ring":1,"degree":3,"tasks_hosted":655,"total_exec_cycles":1926778,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":2,"ring":1,"degree":3,"tasks_hosted":450,"total_exec_cycles":1333493,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":3,"ring":1,"degree":3,"tasks_hosted":671,"total_exec_cycles":1925471,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":4,"ring":1,"degree":3,"tasks_hosted":668,"total_exec_cycles":1905499,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":5,"ring":1,"degree":3,"tasks_hosted":668,"total_exec_cycles":1936560,"faulty_cores":0,"state":"ACTIVE"},
+    {"id":6,"ring":1,"degree":3,"tasks_hosted":650,"total_exec_cycles":1886757,"faulty_cores":0,"state":"ACTIVE"}
+  ]
+}

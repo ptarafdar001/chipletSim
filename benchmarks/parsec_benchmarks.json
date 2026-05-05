@@ -1,0 +1,387 @@
+{
+  "suite": "PARSEC",
+  "version_note": "Built from PARSEC GitHub source",
+  "apps": {
+    "blackscholes": {
+      "version": "2.2",
+      "parallelization_models": [
+        "hooks",
+        "openmp",
+        "pthreads",
+        "serial",
+        "tbb"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/blackscholes",
+          "args": "${NTHREADS} in_10M.txt prices.txt"
+        },
+        "simdev": {
+          "exec": "bin/blackscholes",
+          "args": "${NTHREADS} in_16.txt prices.txt"
+        },
+        "simlarge": {
+          "exec": "bin/blackscholes",
+          "args": "${NTHREADS} in_64K.txt prices.txt"
+        },
+        "simmedium": {
+          "exec": "bin/blackscholes",
+          "args": "${NTHREADS} in_16K.txt prices.txt"
+        },
+        "simsmall": {
+          "exec": "bin/blackscholes",
+          "args": "${NTHREADS} in_4K.txt prices.txt"
+        },
+        "test": {
+          "exec": "bin/blackscholes",
+          "args": "${NTHREADS} in_4.txt prices.txt"
+        }
+      }
+    },
+    "bodytrack": {
+      "version": "2.0",
+      "parallelization_models": [
+        "hooks",
+        "openmp",
+        "pthreads",
+        "serial",
+        "tbb"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/bodytrack",
+          "args": "sequenceB_261 4 261 4000 5 0 ${NTHREADS}"
+        },
+        "simdev": {
+          "exec": "bin/bodytrack",
+          "args": "sequenceB_1 4 1 100 3 0 ${NTHREADS}"
+        },
+        "simlarge": {
+          "exec": "bin/bodytrack",
+          "args": "sequenceB_4 4 4 4000 5 0 ${NTHREADS}"
+        },
+        "simmedium": {
+          "exec": "bin/bodytrack",
+          "args": "sequenceB_2 4 2 2000 5 0 ${NTHREADS}"
+        },
+        "simsmall": {
+          "exec": "bin/bodytrack",
+          "args": "sequenceB_1 4 1 1000 5 0 ${NTHREADS}"
+        },
+        "test": {
+          "exec": "bin/bodytrack",
+          "args": "sequenceB_1 4 1 5 1 0 ${NTHREADS}"
+        }
+      }
+    },
+    "facesim": {
+      "version": "2.0",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial"
+      ],
+      "input_sets": [],
+      "run_configs": {
+        "native": {
+          "exec": "bin/facesim",
+          "args": "-timing -threads ${NTHREADS} -lastframe 100"
+        },
+        "simdev": {
+          "exec": "bin/facesim",
+          "args": "-timing -threads ${NTHREADS}"
+        },
+        "simlarge": {
+          "exec": "bin/facesim",
+          "args": "-timing -threads ${NTHREADS}"
+        },
+        "simmedium": {
+          "exec": "bin/facesim",
+          "args": "-timing -threads ${NTHREADS}"
+        },
+        "simsmall": {
+          "exec": "bin/facesim",
+          "args": "-timing -threads ${NTHREADS}"
+        },
+        "test": {
+          "exec": "bin/facesim",
+          "args": "-h"
+        }
+      }
+    },
+    "ferret": {
+      "version": "2.0",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial",
+        "tbb"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/ferret",
+          "args": "corel lsh queries 50 20 ${NTHREADS} output.txt"
+        },
+        "simdev": {
+          "exec": "bin/ferret",
+          "args": "corel lsh queries 5 5 ${NTHREADS} output.txt"
+        },
+        "simlarge": {
+          "exec": "bin/ferret",
+          "args": "corel lsh queries 10 20 ${NTHREADS} output.txt"
+        },
+        "simmedium": {
+          "exec": "bin/ferret",
+          "args": "corel lsh queries 10 20 ${NTHREADS} output.txt"
+        },
+        "simsmall": {
+          "exec": "bin/ferret",
+          "args": "corel lsh queries 10 20 ${NTHREADS} output.txt"
+        },
+        "test": {
+          "exec": "bin/ferret",
+          "args": "corel lsh queries 5 5 ${NTHREADS} output.txt"
+        }
+      }
+    },
+    "fluidanimate": {
+      "version": "3.0",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial",
+        "tbb"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/fluidanimate",
+          "args": "${NTHREADS} 500 in_500K.fluid out.fluid"
+        },
+        "simdev": {
+          "exec": "bin/fluidanimate",
+          "args": "${NTHREADS} 3 in_15K.fluid out.fluid"
+        },
+        "simlarge": {
+          "exec": "bin/fluidanimate",
+          "args": "${NTHREADS} 5 in_300K.fluid out.fluid"
+        },
+        "simmedium": {
+          "exec": "bin/fluidanimate",
+          "args": "${NTHREADS} 5 in_100K.fluid out.fluid"
+        },
+        "simsmall": {
+          "exec": "bin/fluidanimate",
+          "args": "${NTHREADS} 5 in_35K.fluid out.fluid"
+        },
+        "test": {
+          "exec": "bin/fluidanimate",
+          "args": "${NTHREADS} 1 in_5K.fluid out.fluid"
+        }
+      }
+    },
+    "freqmine": {
+      "version": "1.2",
+      "parallelization_models": [
+        "hooks",
+        "openmp",
+        "serial"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/freqmine",
+          "args": "webdocs_250k.dat 11000"
+        },
+        "simdev": {
+          "exec": "bin/freqmine",
+          "args": "T10I4D100K_1k.dat 3"
+        },
+        "simlarge": {
+          "exec": "bin/freqmine",
+          "args": "kosarak_990k.dat 790"
+        },
+        "simmedium": {
+          "exec": "bin/freqmine",
+          "args": "kosarak_500k.dat 410"
+        },
+        "simsmall": {
+          "exec": "bin/freqmine",
+          "args": "kosarak_250k.dat 220"
+        },
+        "test": {
+          "exec": "bin/freqmine",
+          "args": "T10I4D100K_3.dat 1"
+        }
+      }
+    },
+    "raytrace": {
+      "version": "1.2",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/rtview",
+          "args": "thai_statue.obj -automove -nthreads ${NTHREADS} -frames 200 -res 1920 1080"
+        },
+        "simdev": {
+          "exec": "bin/rtview",
+          "args": "bunny.obj -automove -nthreads ${NTHREADS} -frames 1 -res 16 16"
+        },
+        "simlarge": {
+          "exec": "bin/rtview",
+          "args": "happy_buddha.obj -automove -nthreads ${NTHREADS} -frames 3 -res 1920 1080"
+        },
+        "simmedium": {
+          "exec": "bin/rtview",
+          "args": "happy_buddha.obj -automove -nthreads ${NTHREADS} -frames 3 -res 960 540"
+        },
+        "simsmall": {
+          "exec": "bin/rtview",
+          "args": "happy_buddha.obj -automove -nthreads ${NTHREADS} -frames 3 -res 480 270"
+        },
+        "test": {
+          "exec": "bin/rtview",
+          "args": "octahedron.obj -automove -nthreads ${NTHREADS} -frames 1 -res 1 1"
+        }
+      }
+    },
+    "swaptions": {
+      "version": "2.1",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial",
+        "tbb"
+      ],
+      "input_sets": [],
+      "run_configs": {
+        "native": {
+          "exec": "bin/swaptions",
+          "args": "-ns 128 -sm 1000000 -nt ${NTHREADS}"
+        },
+        "simdev": {
+          "exec": "bin/swaptions",
+          "args": "-ns 3 -sm 50 -nt ${NTHREADS}"
+        },
+        "simlarge": {
+          "exec": "bin/swaptions",
+          "args": "-ns 64 -sm 40000 -nt ${NTHREADS}"
+        },
+        "simmedium": {
+          "exec": "bin/swaptions",
+          "args": "-ns 32 -sm 20000 -nt ${NTHREADS}"
+        },
+        "simsmall": {
+          "exec": "bin/swaptions",
+          "args": "-ns 16 -sm 10000 -nt ${NTHREADS}"
+        },
+        "test": {
+          "exec": "bin/swaptions",
+          "args": "-ns 1 -sm 5 -nt ${NTHREADS}"
+        }
+      }
+    },
+    "vips": {
+      "version": "7.22.1",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/vips",
+          "args": "im_benchmark orion_18000x18000.v output.v"
+        },
+        "simdev": {
+          "exec": "bin/vips",
+          "args": "im_benchmark barbados_256x288.v output.v"
+        },
+        "simlarge": {
+          "exec": "bin/vips",
+          "args": "im_benchmark bigben_2662x5500.v output.v"
+        },
+        "simmedium": {
+          "exec": "bin/vips",
+          "args": "im_benchmark vulture_2336x2336.v output.v"
+        },
+        "simsmall": {
+          "exec": "bin/vips",
+          "args": "im_benchmark pomegranate_1600x1200.v output.v"
+        },
+        "test": {
+          "exec": "bin/vips",
+          "args": "im_benchmark barbados_256x288.v output.v"
+        }
+      }
+    },
+    "x264": {
+      "version": "r1047.1",
+      "parallelization_models": [
+        "hooks",
+        "pthreads",
+        "serial"
+      ],
+      "input_sets": [
+        "input_simdev.tar",
+        "input_test.tar"
+      ],
+      "run_configs": {
+        "native": {
+          "exec": "bin/x264",
+          "args": "--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_1920x1080_512.y4m"
+        },
+        "simdev": {
+          "exec": "bin/x264",
+          "args": "--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_64x36_3.y4m"
+        },
+        "simlarge": {
+          "exec": "bin/x264",
+          "args": "--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_640x360_128.y4m"
+        },
+        "simmedium": {
+          "exec": "bin/x264",
+          "args": "--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_640x360_32.y4m"
+        },
+        "simsmall": {
+          "exec": "bin/x264",
+          "args": "--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_640x360_8.y4m"
+        },
+        "test": {
+          "exec": "bin/x264",
+          "args": "--quiet --qp 20 --partitions b8x8,i4x4 --ref 5 --direct auto --b-pyramid --weightb --mixed-refs --no-fast-pskip --me umh --subme 7 --analyse b8x8,i4x4 --threads ${NTHREADS} -o eledream.264 eledream_32x18_1.y4m"
+        }
+      }
+    }
+  }
+}

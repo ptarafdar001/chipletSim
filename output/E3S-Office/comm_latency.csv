@@ -1,0 +1,5 @@
+src_task_id,src_name,src_chiplet,src_core,dst_task_id,dst_name,dst_chiplet,dst_core,volume_bytes,comm_latency_cycles,inject_cycle
+0,g0_src_t45,0,0,1,g0_text_t44,4,1,1000,153,32505
+4,g0_dith_t42,0,3,2,g0_sink_t45,0,1,787000,49215,68025
+1,g0_text_t44,4,1,2,g0_sink_t45,0,1,1000,90,50868
+0,g0_src_t45,0,0,3,g0_rotate_t43,0,0,787000,49190,32505

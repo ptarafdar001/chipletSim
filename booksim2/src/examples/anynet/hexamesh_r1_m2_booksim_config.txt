@@ -1,0 +1,59 @@
+// BookSim2 config — HexaMesh + Intra-Chiplet Mesh (anynet)
+// rings=1, mesh_dim=2, chiplets=7, total_nodes=28
+// intra_latency=2, inter_latency=27
+
+//
+// Topology — anynet encodes exact HexaMesh+Mesh structure
+//
+
+topology     = anynet;
+network_file = examples/anynet/hexamesh_r1_m2_anynet;
+
+//
+// Routing — must use min_anynet (Dijkstra on hex+mesh graph)
+//
+
+routing_function = min;
+
+//
+// Flow control
+//
+
+num_vcs          = 8;
+vc_buf_size      = 8;
+wait_for_tail_credit = 1;
+
+vc_allocator     = islip;
+sw_allocator     = islip;
+alloc_iters      = 2;
+
+credit_delay     = 2;
+routing_delay    = 0;
+vc_alloc_delay   = 1;
+sw_alloc_delay   = 1;
+st_final_delay   = 1;
+
+input_speedup    = 1;
+output_speedup   = 1;
+internal_speedup = 1.0;
+
+//
+// Traffic
+//
+
+sim_type         = latency;
+warmup_periods   = 3;
+sample_period    = 1000;
+sim_count        = 1;
+
+traffic          = uniform;
+injection_rate   = 0.01;
+packet_size      = 1;
+use_read_write   = 0;
+
+// Architecture reference (not used by BookSim, for documentation)
+// hexamesh_rings        = 1
+// hexamesh_chiplets     = 7
+// cores_per_chiplet     = 4
+// intra_hop_cycles      = 2
+// inter_hop_cycles      = 27  (UCIe PHY)

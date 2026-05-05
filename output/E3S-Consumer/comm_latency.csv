@@ -1,0 +1,13 @@
+src_task_id,src_name,src_chiplet,src_core,dst_task_id,dst_name,dst_chiplet,dst_core,volume_bytes,comm_latency_cycles,inject_cycle
+0,g0_src_t45,2,0,1,g0_filt-r_t39,2,0,2000000,125027,32505
+0,g0_src_t45,2,0,2,g0_filt-g_t39,2,1,2000000,125004,32505
+0,g0_src_t45,2,0,3,g0_filt-b_t39,2,3,2000000,125002,32505
+1,g0_filt-r_t39,2,0,4,g0_rgb-yiq_t41,0,0,2000000,125027,174242
+2,g0_filt-g_t39,2,1,4,g0_rgb-yiq_t41,0,0,2000000,125027,174219
+3,g0_filt-b_t39,2,3,4,g0_rgb-yiq_t41,0,0,2000000,125027,174217
+4,g0_rgb-yiq_t41,0,0,5,g0_cjpeg_t37,0,1,6000000,375027,316579
+5,g0_cjpeg_t37,0,1,6,g0_sink_t45,4,1,1000000,62527,707716
+7,g1_src_t45,6,0,8,g1_djpeg_t38,4,0,1000000,62527,32505
+8,g1_djpeg_t38,4,0,9,g1_display_t45,4,1,6000000,375027,111442
+8,g1_djpeg_t38,4,0,10,g1_rgb-cymk_t40,4,3,6000000,375027,111442
+10,g1_rgb-cymk_t40,4,3,11,g1_print_t45,4,0,6000000,375027,503479

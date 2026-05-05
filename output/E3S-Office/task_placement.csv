@@ -1,0 +1,6 @@
+task_id,name,type,criticality,exec_time,actual_duration,deadline,release_time,mem_io_penalty,data_ready_cycle,wait_cycles,slack_time,cluster_id,assigned_chiplet,assigned_core,replica_core,start_cycle,finish_cycle,state
+0,g0_src_t45,IO_BOUND,HIGH,32500,32505,-1,0,5,0,0,-1,0,0,0,2,0,32505,COMPLETED
+1,g0_text_t44,MEMORY_BOUND,MEDIUM,18200,18210,-1,0,10,32658,153,-1,1,4,1,-1,32658,50868,COMPLETED
+2,g0_sink_t45,IO_BOUND,HIGH,32500,32505,-1,0,5,117240,49215,-1,0,0,1,3,117240,149745,COMPLETED
+3,g0_rotate_t43,MEMORY_BOUND,MEDIUM,17900,17910,-1,0,10,81695,49190,-1,0,0,0,-1,81695,99605,COMPLETED
+4,g0_dith_t42,MEMORY_BOUND,MEDIUM,17600,17610,-1,0,10,50415,50415,-1,0,0,3,-1,50415,68025,COMPLETED

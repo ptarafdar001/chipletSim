@@ -1,0 +1,99 @@
+#!/usr/bin/env perl
+BEGIN{$^W=1}
+
+# This script will make use of the information in this directory to
+# automatically generate input files, in the TGFF format, for CORDS,
+# COWLS, and MOCSYN.  If you need a different format, you should
+# still consider starting from this script and modifying it, or
+# adding to it.  I have tried to make it fairly general.  It's not
+# as well commented as the source code, though, as I have written it
+# under extreme time pressure.
+
+# Note that some of the EEMBC web pages had typographical errors in
+# processor names (same processor with different names).  I fixed
+# this in the HTML files.  Ideally, new EEMBC HTML files could be
+# dropped in, here.  That will work when EEMBC fixes its typos.
+
+# First, you'll need to specify a few variables.
+
+####
+
+# Must list all examples for which processors will be defined in the
+# unified processor database.  A single processor database is used
+# to #keep task type numbers consistent between examples.
+@ex = qw/auto-indust
+	networking
+	telecom
+	consumer
+	office-automation/;
+
+# List the programs (formats) you want to run here.
+@programs = qw/cowls mocsyn mocsyn-asic cords/;
+
+# From here, onward, you shouldn't need to change things unless you
+# want to add a new program.
+
+####
+# Define a system that responds to a break properly.
+sub my_system {
+	my $pid = fork;
+	if (! defined $pid) {
+		return -1;
+	} elsif ($pid) {
+		return waitpid($pid, 0);
+	} else {
+		exec(@_) or exit $!;
+	}
+}
+
+####
+# Define a 2D hash containing all the graphs.
+%graph = ();
+
+foreach my $ex (@ex) {
+	foreach my $prog (@programs) {
+		if ($prog eq 'mocsyn-asic') {
+			$graph{$ex}{$prog} = `cat $ex-mocsyn.graph`;
+		} else {
+			$graph{$ex}{$prog} = `cat $ex-$prog.graph`;
+		}
+	}
+}
+
+# Generate the EEMBC HTML filenames.
+@ex_web = @ex;
+foreach (@ex_web) {
+	$_ .= ".html";
+}
+
+# Generate the processor database
+print "Writing processor database to proc-db-*\n";
+my_system "./conv-proc @ex_web";
+
+print "Writing link databases to link-db-*\n";
+my_system "./conv-link";
+
+foreach my $prog (@programs) {
+# Read them back in.
+	my @db = ();
+
+	if ($prog =~ m/mocsyn-asic/) {
+		@db = (`cat proc-db-mocsyn-asic`, "\n",
+		`cat link-db-mocsyn`, "\n",
+		`cat misc-mocsyn`);
+	} else {
+		@db = (`cat proc-db-$prog`, "\n",
+		`cat link-db-$prog`, "\n",
+		`cat misc-$prog`);
+	}
+
+	foreach my $ex (@ex) {
+# Write them all out to TGFF format files.
+		print "Writing $ex-$prog.tgff\n";
+		open FILE, "> $ex-$prog.tgff";
+		print FILE $graph{$ex}{$prog}, "\n", @db;
+		close FILE;		
+	}
+}
+
+print "\n";

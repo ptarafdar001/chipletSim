@@ -1,0 +1,6 @@
+cluster_id,type,task_count,total_exec_cost,total_comm_volume,avg_affinity,max_criticality,primary_chiplet,spill_count
+0,COMM_HEAVY,2,33400,6000000,0.8542,MEDIUM,0,0
+1,COMM_LESS,4,82600,0,0.0000,HIGH,2,0
+2,COMM_LESS,1,32500,0,0.0000,HIGH,4,0
+3,COMM_HEAVY,4,98400,18000000,0.9028,HIGH,4,0
+4,COMM_LESS,1,32500,0,0.0000,HIGH,6,0

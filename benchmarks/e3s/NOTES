@@ -1,0 +1,75 @@
+Embedded system synthesis benchmarks suite (E3S)
+
+This document is a collection of notes I took when developing the
+E3S benchmarks suite.
+
+The method of computing expected PCI bridge power consumption from
+the TI PCI2040 datasheet was open to interpretation so I used power
+consumption numbers given for the (similar functionality) IBM 8266X
+family.
+
+I didn't characterize widely-used processor-specific busses like
+MC680X0 and AMBA as system-wide busses because bridges to other
+processor-specific busses are often not available.
+
+Infiniband has not yet been characterized because few bridges and
+host controllers are available.  Those that are presently available
+tend to bridge from PCI, an assumption that doesn't make much sense
+for an embedded system using Infiniband for inter-processor
+communication.
+
+The communication resource contact constraints are somewhat
+artificial.  They are, mostly, a relic to allow compatibility with
+an older model of communication.
+
+The characterization of wireless communication resources isn't as
+precise as that of processors and wired bridges.  There are multiple
+reasons for this.  However, one of the most important reasons is
+that the price of wireless communication resources is likely to be
+strongly tied to product case design, antennas, and licensing
+arrangements.  In other words, this information was quite hard to
+fully specify so I resorted to best-guesses in many cases.  Please
+email me (dickrp@ee.princeton.edu) if you have suggestions for
+improvements.
+
+In order to determine processor area, I first looked at datasheets.
+Few processors characterized by EEMBC had information about
+processor area or transistor count.  I then looked at web pages and
+encountered similar problems.  I could find pleanty of processor
+areas but they were usually for processor which were not
+characterized by EEMBC.  Then, I tried Microprocessor Report: same
+problem.  Finally, I tried emailing and calling most of the vendors
+in EEMBC.  Most, which were willing to talk with me, refused to
+release areas or transistor counts even under an NDA.  However, at
+the end of this, I did have numbers for a few processors -- but not
+enough for a benchmarking suite.  I used the processors I had as a
+base, then I derived a linear relationship between die areas (scaled
+by process) and cache size.  I used this relationship to estimate
+the areas of processors I was not able to get exact numbers for.
+
+Processor       Area (mm^2)  Process (um)  Cache (KB)  Norm (.18u) area (mm^2)
+STMicro ST20C2  1.5          .18           4           1.5
+AMD K6-2        81           .25           64          42
+AMD K6-III      135          .25           320         70
+PowerPC         106          .18           320         106
+
+This gives the following relationship:
+  area (mm^2) = cache size (KB) * 0.3 (mm^2/KB)
+I place a lower bound of 1 mm^2 on the size of processors.
+
+In other cases, used memory price from Crucual: about $1/meg in the
+small package quanties that will be used for the EEMBC examples.
+Note that the package size must always be a power of two.
+
+For MOCSYN, the power consumption values are at the maximum
+frequency.
+
+In order to add the right area of SRAM to the floorplan in MOCSYN, I
+used numbers from the following article: "Online Exclusive: Discrete
+Memories Trade Off with ASIC Cells" by James Dillon and David
+Lindley.  Integrated System Design.  January 3, 2002.  120 mm2 for
+2.5 Mb of dual-ported SRAM.  45.8 pm^2 per bit in 0.18u process.
+
+Right now, I don't do anything with the task preemption times.
+Ther're place-holders for later use.  I assumed idle power to be
+1/10 task power.

@@ -1,0 +1,41 @@
+# Normalized known areas to 0.18u process
+
+# processor & price & preempt cost & task_power & area & max clock
+
+AMD ElanSC520-133 MHz & 33 & 150E-6 & 1.6 & - & 133
+AMD K6-2 450 & 88 & 150E-6 & 11.3 & 42 & 450
+AMD K6-2E 400Mhz/ACR & 77 & 150E-6 & 10.15 & 42 & 400
+AMD K6-2E+ 500Mhz/ACR & 99 & 150E-6 & 13.9 & 42 & 500
+AMD K6-IIIE+ 550Mhz/ACR & 125.64 & 150E-6 & 15.7 & 70 & 550
+Analog Devices 21065L - 60 MHz & 10 & 150E-6 & 0.907 & - & 60
+IBM PowerPC 405GP - 266 Mhz & 65 & 150E-6 & 2 & - & 266
+IBM PowerPC 750CX - 500 MHz & 210 & 150E-6 & 6 & - & 500
+IDT32334-100 MHz & 16 & 150E-6 & 1.2 & - & 100
+IDT79RC32364-100 & 12.50 & 150E-6 & 0.58 & - & 100
+IDT79RC32V334-150 & 24 & 150E-6 & 1.7 & - & 150
+IDT79RC64575-250MHz & 52.10 & 150E-6 & 0.77 & - & 250
+Imsys Cjip 40 Mhz & 19 & 150E-6 & 0.165 & - & 40
+Motorola MPC555 - 40MHz & 45 & 150E-6 & 1 & - & 40
+NEC  VR5432 - 167 MHz & 30 & 150E-6 & 2.5 & - & 167
+ST20C2 50 Mhz & 15 & 150E-6 & 75E-3 & 1.5 & 50
+TI TMS320C6203-300MHz & 111.22 & 150E-6 & 1.55 & - & 300
+
+# AMD K6-III+ 550Mhz/ACR & - & 150E-6 & - & -
+# Infineon Carmel 10xx-170MHz
+# Infineon TriCore/TC11IB-96MHz
+# LSI402ZX - 200 MHz
+# Mitsubishi M16C/62A - 16 MHz
+# Mitsubishi M16C/80 - 20 MHz
+# Mitsubishi M32R/E- 40MHz
+# Motorola MPC7455 - 1GHz
+# NEC  VR5000 - 250 MHz
+# NEC V832-143 MHz
+# NEC V850E - 50 MHz
+# NEC VR4122-180 MHz
+# NEC VR5500 - 400 MHz
+# National CompactRISC CR16B - 50 MHz
+# National Geode GX1 - 200
+# Toshiba TMP95FY64F - 20 MHz
+# Toshiba TMPR3927F - 133MHz
+# TriMedia TM1300 -166 MHz
+# BOPS Manta v2.0 - 136 MHz & - & 

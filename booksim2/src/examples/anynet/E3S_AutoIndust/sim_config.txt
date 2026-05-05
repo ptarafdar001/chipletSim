@@ -1,0 +1,57 @@
+// BookSim2 config — HexaMesh anynet + trace-driven injection
+// rings=1, mesh_dim=2, chiplets=7, total_nodes=28
+// intra_latency=2 cycles, inter_latency=27 cycles (UCIe PHY)
+
+// ── Topology ────────────────────────────────────────────────────
+topology     = anynet;
+network_file = examples/anynet/hexamesh_r1_m2_anynet;
+
+// ── Routing ─────────────────────────────────────────────────────
+// "min" + "_" + "anynet" = "min_anynet" (Dijkstra shortest-path)
+routing_function = min;
+
+// ── Flow control ─────────────────────────────────────────────────
+num_vcs          = 8;
+vc_buf_size      = 8;
+wait_for_tail_credit = 1;
+vc_allocator     = islip;
+sw_allocator     = islip;
+alloc_iters      = 2;
+credit_delay     = 2;
+routing_delay    = 0;
+vc_alloc_delay   = 1;
+sw_alloc_delay   = 1;
+st_final_delay   = 1;
+input_speedup    = 1;
+output_speedup   = 1;
+internal_speedup = 1.0;
+
+// ── Trace-driven injection ───────────────────────────────────────
+// Both traffic AND injection_process must be set to "trace".
+// trace_file: 4-column text file, no comments, one packet per line:
+//   <inject_cycle>  <src_node_id>  <dst_node_id>  <packet_size_flits>
+traffic           = trace;
+injection_process = trace;
+trace_file        = examples/anynet/E3S_AutoIndust/sim_trace.txt;
+
+// packet_size: upper bound only — actual size comes from trace column 4.
+// Set this to your largest packet size in the trace.
+packet_size       = 938;
+
+use_read_write    = 0;
+
+// ── Simulation control ───────────────────────────────────────────
+// sim_type=latency: tracks per-packet end-to-end latency.
+// warmup_periods=0: convergence-based warmup (correct for trace mode —
+//   the modified trafficmanager exits as soon as all trace events are
+//   injected and queues drain, printing stats before any reset).
+// sample_period: must be >= last_trace_inject_cycle + ~100 cycles margin
+//   so the warmup phase spans the entire trace. Use:
+//   sample_period = <last_event_cycle_in_your_trace> + 100
+sim_type          = latency;
+warmup_periods    = 0;
+sample_period     = 48071;
+sim_count         = 1;
+
+// ── Optional: write Matlab-format stats to a file ────────────────
+// stats_out = results.m;

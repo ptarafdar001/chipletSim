@@ -1,0 +1,75 @@
+# =============================
+# Build Files
+# =============================
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+*.cmake
+
+# =============================
+# Compiled Objects
+# =============================
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+*.dll
+*.dylib
+
+# =============================
+# Debug Files
+# =============================
+*.log
+*.gdb
+*.lldb
+*.stackdump
+
+# =============================
+# VS Code / IDE
+# =============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =============================
+# OS Files
+# =============================
+.DS_Store
+Thumbs.db
+
+# =============================
+# Large Benchmark Outputs
+# =============================
+data/results/*
+!data/results/.keep
+
+# =============================
+# Plots and Generated Figures
+# =============================
+plots/*.png
+plots/*.pdf
+plots/*.svg
+
+# =============================
+# JSON Auto Generated
+# =============================
+data/generated/*
+!data/generated/.keep
+
+# =============================
+# Temporary Files
+# =============================
+*.tmp
+*.bak
+*.cache
+
+# =============================
+# Python Cache (if using scripts)
+# =============================
+__pycache__/
+*.pyc
